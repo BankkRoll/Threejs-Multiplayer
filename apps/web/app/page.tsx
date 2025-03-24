@@ -1,12 +1,8 @@
-import dynamic from "next/dynamic";
-
-// Dynamically import the Game component with no SSR
-// This is necessary because Three.js requires the browser environment
-const Game = dynamic(() => import("@/components/game"));
+import Game from "@/components/game";
 
 export default function Home() {
   return (
-    <main>
+    <main className="h-screen w-full overflow-hidden">
       <Game />
     </main>
   );

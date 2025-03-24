@@ -1,33 +1,35 @@
 "use client";
 
-import { Canvas } from "@/components/canvas";
-import { Crosshair } from "@/components/crosshair";
-import { useLoadingAssets } from "@/hooks/use-loading-assets";
+import * as THREE from "three";
+
+import {
+  BrightnessContrast,
+  ChromaticAberration,
+  EffectComposer,
+  ToneMapping,
+  Vignette,
+} from "@react-three/postprocessing";
+import { CuboidCollider, Physics, RigidBody } from "@react-three/rapier";
 import {
   Environment,
   MeshReflectorMaterial,
   PerspectiveCamera,
 } from "@react-three/drei";
-import {
-  EffectComposer,
-  Vignette,
-  ChromaticAberration,
-  BrightnessContrast,
-  ToneMapping,
-} from "@react-three/postprocessing";
-import { BlendFunction } from "postprocessing";
-import { CuboidCollider, Physics, RigidBody } from "@react-three/rapier";
-import { useControls, folder } from "leva";
-import { useTexture } from "@react-three/drei";
-import { useRef } from "react";
-import * as THREE from "three";
 import { Player, PlayerControls } from "@/game/player";
+import { folder, useControls } from "leva";
+
 import { Ball } from "@/game/ball";
-import { SphereTool } from "@/game/sphere-tool";
-import { Platforms } from "@/game/platforms";
-import { MultiplayerProvider } from "@/multiplayer/multiplayer-context";
+import { BlendFunction } from "postprocessing";
+import { Canvas } from "@/components/canvas";
 import { ConnectionStatus } from "@/multiplayer/connection-status";
+import { Crosshair } from "@/components/crosshair";
+import { MultiplayerProvider } from "@/multiplayer/multiplayer-context";
 import { OtherPlayers } from "@/multiplayer/other-players";
+import { Platforms } from "@/game/platforms";
+import { SphereTool } from "@/game/sphere-tool";
+import { useLoadingAssets } from "@/hooks/use-loading-assets";
+import { useRef } from "react";
+import { useTexture } from "@react-three/drei";
 
 const Scene = () => {
   const texture = useTexture("/final-texture.png");
