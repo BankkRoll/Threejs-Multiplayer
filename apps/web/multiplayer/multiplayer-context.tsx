@@ -8,6 +8,7 @@ import {
   useContext,
   useEffect,
   useState,
+  useRef,
 } from "react";
 
 interface MultiplayerContextType {
@@ -34,21 +35,35 @@ interface MultiplayerProviderProps {
 export const MultiplayerProvider: React.FC<MultiplayerProviderProps> = ({
   children,
 }) => {
-  const [client] = useState(new Client("ws://localhost:3001"));
   const [room, setRoom] = useState<Room | null>(null);
   const [connected, setConnected] = useState(false);
   const [clientId, setClientId] = useState("");
+  const clientRef = useRef<Client | null>(null);
+  const connectionAttempts = useRef(0);
+  const maxRetries = 3;
 
   useEffect(() => {
+    // Create the client only once when the component mounts
+    if (!clientRef.current) {
+      clientRef.current = new Client("ws://localhost:3001");
+    }
+
     const connectToServer = async () => {
+      if (!clientRef.current) return;
+
       try {
         console.log("Connecting to game server...");
-        const joinedRoom = await client.joinOrCreate("game_room");
-        console.log("Connected to room:", joinedRoom.id);
+        connectionAttempts.current += 1;
 
+        // Use joinOrCreate with proper error handling
+        const joinedRoom =
+          await clientRef.current.joinOrCreate<Room>("game_room");
+
+        console.log("Connected to room:", joinedRoom.id);
         setRoom(joinedRoom);
         setConnected(true);
         setClientId(joinedRoom.sessionId);
+        connectionAttempts.current = 0;
 
         // Handle disconnection
         joinedRoom.onLeave((code) => {
@@ -59,17 +74,32 @@ export const MultiplayerProvider: React.FC<MultiplayerProviderProps> = ({
       } catch (error) {
         console.error("Could not connect to server:", error);
         setConnected(false);
+
+        // Retry connection with exponential backoff if under max retries
+        if (connectionAttempts.current < maxRetries) {
+          const backoffTime = Math.pow(2, connectionAttempts.current) * 1000;
+          console.log(
+            `Retrying connection in ${backoffTime / 1000} seconds...`
+          );
+          setTimeout(connectToServer, backoffTime);
+        } else {
+          console.error(
+            "Max connection attempts reached. Please check if the server is running."
+          );
+        }
       }
     };
 
-    connectToServer();
+    if (!connected && !room) {
+      connectToServer();
+    }
 
     return () => {
       if (room) {
         room.leave();
       }
     };
-  }, [client]);
+  }, [connected, room]);
 
   return (
     <MultiplayerContext.Provider

@@ -10,11 +10,7 @@ import {
   Vignette,
 } from "@react-three/postprocessing";
 import { CuboidCollider, Physics, RigidBody } from "@react-three/rapier";
-import {
-  Environment,
-  MeshReflectorMaterial,
-  PerspectiveCamera,
-} from "@react-three/drei";
+import { Environment, PerspectiveCamera } from "@react-three/drei";
 import { Player, PlayerControls } from "@/game/player";
 import { folder, useControls } from "leva";
 
@@ -63,15 +59,7 @@ const Scene = () => {
 
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]}>
         <planeGeometry args={[50, 50]} />
-        <MeshReflectorMaterial
-          map={groundTexture}
-          mirror={0}
-          roughness={1}
-          depthScale={0}
-          minDepthThreshold={0.9}
-          maxDepthThreshold={1}
-          metalness={0}
-        />
+        <meshStandardMaterial map={groundTexture} roughness={1} metalness={0} />
       </mesh>
 
       {/* Border walls */}
@@ -109,7 +97,7 @@ export default function Game() {
     {
       collapsed: true,
       hidden: true,
-    },
+    }
   );
 
   const {
@@ -142,7 +130,7 @@ export default function Game() {
           fogNear: { value: 13, min: 0, max: 50, step: 1 },
           fogFar: { value: 95, min: 0, max: 100, step: 1 },
         },
-        { collapsed: true, hidden: true },
+        { collapsed: true, hidden: true }
       ),
       lighting: folder(
         {
@@ -151,7 +139,7 @@ export default function Game() {
           directionalHeight: { value: 20, min: 5, max: 50, step: 1 },
           directionalDistance: { value: 10, min: 5, max: 30, step: 1 },
         },
-        { collapsed: true, hidden: true },
+        { collapsed: true, hidden: true }
       ),
       postProcessing: folder(
         {
@@ -181,13 +169,13 @@ export default function Game() {
           },
           toneMappingExposure: { value: 1.2, min: 0, max: 2, step: 0.1 },
         },
-        { collapsed: true, hidden: true },
+        { collapsed: true, hidden: true }
       ),
     },
     {
       collapsed: true,
       hidden: true,
-    },
+    }
   );
 
   return (
@@ -222,10 +210,10 @@ export default function Game() {
         id="ammo-display"
         style={{
           position: "absolute",
-          top: "10px",
+          bottom: "10px",
           right: "10px",
           color: "rgba(255, 255, 255, 0.75)",
-          fontSize: "14px",
+          fontSize: "24px",
           fontFamily: "monospace",
           userSelect: "none",
           zIndex: 1000,
@@ -315,34 +303,39 @@ export default function Game() {
 
         {enablePostProcessing && (
           <EffectComposer>
-            {vignetteEnabled && (
-              <Vignette
-                offset={vignetteOffset}
-                darkness={vignetteDarkness}
-                eskil={false}
-              />
-            )}
-            {chromaticAberrationEnabled && (
-              <ChromaticAberration
-                offset={
-                  new THREE.Vector2(
-                    chromaticAberrationOffset,
-                    chromaticAberrationOffset,
-                  )
-                }
-                radialModulation={false}
-                modulationOffset={0}
-              />
-            )}
-            {brightnessContrastEnabled && (
-              <BrightnessContrast brightness={brightness} contrast={contrast} />
-            )}
-            {colorGradingEnabled && (
-              <ToneMapping
-                blendFunction={BlendFunction.NORMAL}
-                mode={toneMapping}
-              />
-            )}
+            <>
+              {vignetteEnabled && (
+                <Vignette
+                  offset={vignetteOffset}
+                  darkness={vignetteDarkness}
+                  eskil={false}
+                />
+              )}
+              {chromaticAberrationEnabled && (
+                <ChromaticAberration
+                  offset={
+                    new THREE.Vector2(
+                      chromaticAberrationOffset,
+                      chromaticAberrationOffset
+                    )
+                  }
+                  radialModulation={false}
+                  modulationOffset={0}
+                />
+              )}
+              {brightnessContrastEnabled && (
+                <BrightnessContrast
+                  brightness={brightness}
+                  contrast={contrast}
+                />
+              )}
+              {colorGradingEnabled && (
+                <ToneMapping
+                  blendFunction={BlendFunction.NORMAL}
+                  mode={toneMapping}
+                />
+              )}
+            </>
           </EffectComposer>
         )}
       </Canvas>
