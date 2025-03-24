@@ -1,16 +1,25 @@
 {
-  "name": "shadcn-ui-monorepo",
+  "name": "fps-three-monorepo-turbo",
   "version": "0.0.1",
   "private": true,
-  "scripts": {
+"scripts": {
     "build": "turbo build",
-    "dev": "turbo dev",
+    "dev": "concurrently \"pnpm run dev:web\" \"pnpm run dev:server\"",
+    "dev:web": "cd apps/web && pnpm run dev",
+    "dev:server": "cd apps/server && pnpm run dev",
+    "dev:all": "concurrently \"pnpm run dev:web\" \"pnpm run dev:server\"",
+    "build:web": "cd apps/web && pnpm run build",
+    "build:server": "cd apps/server && pnpm run build",
+    "build:all": "turbo build",
+    "start": "cd apps/server && pnpm run start",
     "lint": "turbo lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "install-all": "pnpm install"
   },
   "devDependencies": {
     "@workspace/eslint-config": "workspace:*",
     "@workspace/typescript-config": "workspace:*",
+    "concurrently": "^8.2.2",
     "prettier": "^3.5.1",
     "turbo": "^2.4.2",
     "typescript": "5.7.3"

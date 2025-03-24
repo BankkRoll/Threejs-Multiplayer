@@ -1,12 +1,13 @@
-import { Button } from "@workspace/ui/components/button"
+import dynamic from "next/dynamic";
 
-export default function Page() {
+// Dynamically import the Game component with no SSR
+// This is necessary because Three.js requires the browser environment
+const Game = dynamic(() => import("@/components/game"));
+
+export default function Home() {
   return (
-    <div className="flex items-center justify-center min-h-svh">
-      <div className="flex flex-col items-center justify-center gap-4">
-        <h1 className="text-2xl font-bold">Hello World</h1>
-        <Button size="sm">Button</Button>
-      </div>
-    </div>
-  )
+    <main>
+      <Game />
+    </main>
+  );
 }
