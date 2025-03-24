@@ -43,9 +43,11 @@ export const MultiplayerProvider: React.FC<MultiplayerProviderProps> = ({
   const maxRetries = 3;
 
   useEffect(() => {
-    // Create the client only once when the component mounts
+    const wsServerUrl =
+      process.env.NEXT_PUBLIC_WS_SERVER_URL || "ws://localhost:3001";
+
     if (!clientRef.current) {
-      clientRef.current = new Client("ws://localhost:3001");
+      clientRef.current = new Client(wsServerUrl);
     }
 
     const connectToServer = async () => {

@@ -5,6 +5,8 @@
  * matchmaking, team-based gameplay, and real-time multiplayer synchronization.
  */
 
+import "dotenv/config";
+
 import { Server, matchMaker } from "@colyseus/core";
 
 import { GameRoom } from "./rooms/GameRoom.js";
@@ -20,6 +22,8 @@ import { monitor } from "@colyseus/monitor";
 // Load environment variables
 const port = Number(process.env.PORT || 3001);
 const debug = process.env.DEBUG === "true";
+const httpBaseUrl = process.env.SERVER_URL || `http://localhost:${port}`;
+const wsBaseUrl = process.env.WS_SERVER_URL || `ws://localhost:${port}`;
 
 // Create Express app
 const app = express();
@@ -32,7 +36,7 @@ app.use("/auth", auth);
 
 // Add password protection to the Colyseus Monitor
 const basicAuthMiddleware = basicAuth({
-  users: { admin: "password" }, // Replace with your desired username and password
+  users: { admin: process.env.MONITOR_PASSWORD || "password" }, // Use env variable or default to "password"
   challenge: true, // Prompt for credentials if not provided
 });
 
@@ -62,7 +66,7 @@ app.use(
       { metadata: "players" }, // Condensed player list (array of player objects)
       "elapsedTime", // Time since room creation
     ],
-  })
+  }),
 );
 
 // Create HTTP server
@@ -97,15 +101,10 @@ app.get("/health", async (req, res) => {
 
 // Start the server using the shared HTTP server
 httpServer.listen(port, () => {
-  console.log(`🚀 Server running on http://localhost:${port}`);
-  console.log(
-    `🎮 Colyseus monitor available at http://localhost:${port}/monitor`
-  );
-  console.log(`🔐 Auth endpoints available at http://localhost:${port}/auth`);
-
-  if (debug) {
-    console.log(`🐛 Debug mode enabled`);
-  }
+  console.log(`🚀 Server running on ${httpBaseUrl} (WebSocket: ${wsBaseUrl})`);
+  console.log(`🎮 Colyseus monitor available at ${httpBaseUrl}/monitor`);
+  console.log(`🔐 Auth endpoints available at ${httpBaseUrl}/auth`);
+  if (debug) console.log(`🐛 Debug mode enabled`);
 });
 
 // Handle graceful shutdown

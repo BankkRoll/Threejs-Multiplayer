@@ -1,4 +1,4 @@
-# FPS Game Monorepo
+# FPS Three Game Monorepo
 
 A multiplayer 3D first-person shooter game built with Next.js, React Three Fiber, and Colyseus.
 
@@ -34,7 +34,7 @@ The project follows a standard Turborepo structure:
 ### Frontend (apps/web)
 
 - **Next.js 15** - App Router for routing and server components
-- **React 19** - UI framework
+- **React 18** - UI framework
 - **React Three Fiber** - React bindings for Three.js
 - **React Three Rapier** - Physics engine for 3D interactions
 - **Colyseus.js** - Client for multiplayer functionality
@@ -58,8 +58,8 @@ The project follows a standard Turborepo structure:
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/fps-game-monorepo.git
-cd fps-game-monorepo
+git clone https://github.com/BankkRoll/Threejs-Multiplayer.git
+cd Threejs-Multiplayer
 
 # Install dependencies
 pnpm install-all
