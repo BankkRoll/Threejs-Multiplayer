@@ -97,7 +97,7 @@ export default function Game() {
     {
       collapsed: true,
       hidden: true,
-    }
+    },
   );
 
   const {
@@ -130,7 +130,7 @@ export default function Game() {
           fogNear: { value: 13, min: 0, max: 50, step: 1 },
           fogFar: { value: 95, min: 0, max: 100, step: 1 },
         },
-        { collapsed: true, hidden: true }
+        { collapsed: true, hidden: true },
       ),
       lighting: folder(
         {
@@ -139,7 +139,7 @@ export default function Game() {
           directionalHeight: { value: 20, min: 5, max: 50, step: 1 },
           directionalDistance: { value: 10, min: 5, max: 30, step: 1 },
         },
-        { collapsed: true, hidden: true }
+        { collapsed: true, hidden: true },
       ),
       postProcessing: folder(
         {
@@ -169,13 +169,13 @@ export default function Game() {
           },
           toneMappingExposure: { value: 1.2, min: 0, max: 2, step: 0.1 },
         },
-        { collapsed: true, hidden: true }
+        { collapsed: true, hidden: true },
       ),
     },
     {
       collapsed: true,
       hidden: true,
-    }
+    },
   );
 
   return (
@@ -316,7 +316,7 @@ export default function Game() {
                   offset={
                     new THREE.Vector2(
                       chromaticAberrationOffset,
-                      chromaticAberrationOffset
+                      chromaticAberrationOffset,
                     )
                   }
                   radialModulation={false}

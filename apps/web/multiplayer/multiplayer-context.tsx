@@ -79,12 +79,12 @@ export const MultiplayerProvider: React.FC<MultiplayerProviderProps> = ({
         if (connectionAttempts.current < maxRetries) {
           const backoffTime = Math.pow(2, connectionAttempts.current) * 1000;
           console.log(
-            `Retrying connection in ${backoffTime / 1000} seconds...`
+            `Retrying connection in ${backoffTime / 1000} seconds...`,
           );
           setTimeout(connectToServer, backoffTime);
         } else {
           console.error(
-            "Max connection attempts reached. Please check if the server is running."
+            "Max connection attempts reached. Please check if the server is running.",
           );
         }
       }
